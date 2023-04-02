@@ -32,8 +32,11 @@ int main(int argc, char** argv)
 	SDL_Texture *mario_tex = NULL;
 	SDL_Rect pos_mario = {0, 0, 0, 0};
 	SDL_Event event;
+
+	int joystick_deadzone = 8000;
+	int joystick_speed = 5;
 	
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER);
 	IMG_Init(IMG_INIT_PNG);
 	
 	SDL_Window* window = SDL_CreateWindow("Test Mario", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
@@ -50,20 +53,43 @@ int main(int argc, char** argv)
 		SDL_FreeSurface(mario);
 	}
 	
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-    SDL_JoystickEventState(SDL_ENABLE);
-    SDL_JoystickOpen(0);
+	SDL_Joystick* joystick = SDL_JoystickOpen(0);
+    if (!joystick) {
+        printf("Error: no se pudo abrir el joystick.\n");
+        return 1;
+    }
     
     while (!exit_requested && appletMainLoop()) 
 	{
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
         SDL_RenderClear(renderer);
         
-        if (mario_tex)
-        	SDL_RenderCopy(renderer, mario_tex, NULL, &pos_mario);
-        	
-        SDL_RenderPresent(renderer);
-        SDL_Delay(wait);
+        if (mario_tex) {
+        	SDL_RenderCopy(renderer, mario_tex, NULL, &pos_mario);}
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+    	SDL_RenderClear(renderer);
+    
+    	// Manejar la entrada del joystick
+    	SDL_JoystickUpdate();
+    	int x = SDL_JoystickGetAxis(joystick, 0);
+    	int y = SDL_JoystickGetAxis(joystick, 1);
+    
+   	 	// Actualizar la posición de la imagen en función de la entrada del joystick
+    	if (x < -joystick_deadzone) // Izquierda
+        	pos_mario.x -= joystick_speed;
+    	else if (x > joystick_deadzone) // Derecha
+        	pos_mario.x += joystick_speed;
+    	if (y < -joystick_deadzone) // Arriba
+        	pos_mario.y -= joystick_speed;
+    	else if (y > joystick_deadzone) // Abajo
+        	pos_mario.y += joystick_speed;
+    
+    	if (mario_tex) {
+        	SDL_RenderCopy(renderer, mario_tex, NULL, &pos_mario);}
+        
+    	SDL_RenderPresent(renderer);
+    	SDL_Delay(wait);
     }
     
     if (mario_tex)
@@ -73,3 +99,4 @@ int main(int argc, char** argv)
     romfsExit();
     return 0;
 }
+
