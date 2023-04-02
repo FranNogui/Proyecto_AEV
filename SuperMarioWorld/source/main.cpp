@@ -143,9 +143,9 @@ int main(int argc, char** argv)
     	int y = SDL_JoystickGetAxis(joystick, 1);
     
    	 	// Actualizar la posición de la imagen en función de la entrada del joystick
-    	if (x >= -joystick_deadzone || x <= joystick_deadzone)
+    	if (x >= -joystick_deadzone && x <= joystick_deadzone)
         	x = 0;
-    	if (y >= -joystick_deadzone || y <= joystick_deadzone)
+    	if (y >= -joystick_deadzone && y <= joystick_deadzone)
         	y = 0;
     	mario.Mover(x, y);
     	
