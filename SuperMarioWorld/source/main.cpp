@@ -1,5 +1,11 @@
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -17,9 +23,12 @@
 #define JOY_UP    13
 #define JOY_RIGHT 14
 #define JOY_DOWN  15
-
+/*
 #define SCREEN_W 256
 #define SCREEN_H 224
+*/
+#define SCREEN_W 1920
+#define SCREEN_H 1080
 
 SDL_Renderer* renderer;
 SDL_Window* window;
@@ -33,40 +42,46 @@ struct Vector2D
 	{
 		this->x = x; this->y = y;
 	}
+	
+	void Normalizar()
+	{
+		float aux = sqrt(x * x + y * y);
+		x /= aux;
+		y /= aux;
+	}
 };
 
 Vector2D& operator +(const Vector2D &v1, const Vector2D &v2)
 {
 	return *(new Vector2D(v1.x + v2.x, v1.y + v2.y));
-};
+}
+
+Vector2D& operator *(const Vector2D &v1, const float &f1)
+{
+	return *(new Vector2D(v1.x * f1, v1.y * f1));
+}
 
 struct Entidad
 {
 	SDL_Texture *textura;
 	SDL_Rect posicion;
+
+	Entidad()
+	{
+		textura = NULL;
+		posicion = {0, 0, 0, 0};
+	}
 	
 	void Ubicar(const Vector2D pos)
 	{
-		posicion.x = pos.x;
-		posicion.y = pos.y;
+		posicion.x = int(pos.x);
+		posicion.y = int(pos.y);
 	}
 	
 	void Ubicar(const float x, const float y)
 	{
-		posicion.x = x;
-		posicion.y = y;
-	}
-	
-	void Mover(const Vector2D mov)
-	{
-		posicion.x += mov.x;
-		posicion.y += mov.y;
-	}
-	
-	void Mover(const float x, const float y)
-	{
-		posicion.x += x;
-		posicion.y += y;
+		posicion.x = int(x);
+		posicion.y = int(y);
 	}
 	
 	void CargarTextura(const char* ruta)
@@ -91,11 +106,90 @@ struct Entidad
 	{
 		SDL_DestroyTexture(textura);
 	}
+};
+
+struct EntidadDinamica : Entidad
+{
+	EntidadDinamica() : Entidad()
+	{}
 	
-	Entidad()
+	void Mover(const Vector2D mov)
 	{
-		textura = NULL;
-		posicion = {0, 0, 0, 0};
+		posicion.x += int(mov.x);
+		posicion.y += int(mov.y);
+	}
+	
+	void Mover(const float x, const float y)
+	{
+		posicion.x += int(x);
+		posicion.y += int(y);
+	}
+};
+
+struct Mapa
+{
+	int ancho;
+	int alto;
+	Entidad tiles_suelo1[8];
+	std::vector<Entidad> tiles_suelo;
+	
+	SDL_Texture* CargarTextura(const char* ruta)
+	{
+		SDL_Surface* img = IMG_Load(ruta);
+		SDL_Texture* tex = NULL;
+		if (img)
+		{
+			tex = SDL_CreateTextureFromSurface(renderer, img);
+			SDL_FreeSurface(img);
+		}
+		return tex;
+	}
+	
+	void CargarTexturaSuelos()
+	{	
+		tiles_suelo1[0].CargarTextura("data/suelos/suelo/Tile_1.png");
+		tiles_suelo1[1].CargarTextura("data/suelos/suelo/Tile_2.png");
+		tiles_suelo1[2].CargarTextura("data/suelos/suelo/Tile_3.png");
+		tiles_suelo1[3].CargarTextura("data/suelos/suelo/Tile_4.png");
+		tiles_suelo1[4].CargarTextura("data/suelos/suelo/Tile_5.png");
+		tiles_suelo1[5].CargarTextura("data/suelos/suelo/Tile_6.png");
+		tiles_suelo1[6].CargarTextura("data/suelos/suelo/Tile_7.png");
+		tiles_suelo1[7].CargarTextura("data/suelos/suelo/Tile_8.png");
+	}
+	
+	Mapa(const char* ruta)
+	{
+		CargarTexturaSuelos();
+		std::ifstream mapa;
+		mapa.open(ruta, std::ios::in);
+		mapa >> ancho >> alto;
+		int pixeles = 16, act = 0;
+		for (int i = 0; i < alto; i++)
+		{
+			for (int j = 0; j < ancho; j++)
+			{
+				mapa >> act;
+				if (act != 0)
+				{
+					act--;
+					tiles_suelo1[act].Ubicar(j * pixeles, i * pixeles);
+					tiles_suelo.push_back(tiles_suelo1[act]);
+				}
+			}
+		}
+		mapa.close();
+	}
+	
+	void Renderizar()
+	{
+		for (std::size_t i = 0; i < tiles_suelo.size(); i++)
+			tiles_suelo[i].Renderizar();
+	}
+	
+	void Destruir()
+	{
+		for (std::size_t i = 0; i < tiles_suelo.size(); i++)
+			tiles_suelo[i].Destruir();
 	}
 };
 
@@ -107,7 +201,7 @@ int main(int argc, char** argv)
 	int exit_requested = 0;
 	int wait = 25;
 	
-	Entidad mario;
+	EntidadDinamica mario;
 	SDL_Event event;
 
 	int joystick_deadzone = 8000;
@@ -127,7 +221,8 @@ int main(int argc, char** argv)
     
     mario.CargarTextura("data/mario/marioPequenyo/derecha/QuietoDerecha.png");
     mario.Ubicar(100.0f, 100.0f);
-    
+    Mapa* mundo1 = new Mapa("data/mapas/mundo1/mundo1.dat");
+
     while (!exit_requested && appletMainLoop()) 
 	{
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
@@ -143,13 +238,27 @@ int main(int argc, char** argv)
     	int y = SDL_JoystickGetAxis(joystick, 1);
     
    	 	// Actualizar la posición de la imagen en función de la entrada del joystick
-    	if (x >= -joystick_deadzone && x <= joystick_deadzone)
-        	x = 0;
-    	if (y >= -joystick_deadzone && y <= joystick_deadzone)
-        	y = 0;
-    	mario.Mover(x, y);
+    	if (x < -joystick_deadzone)
+    		x = -joystick_speed;
+    	else if (x > joystick_deadzone)
+    		x = joystick_speed;
+    	else
+    		x = 0;
+    	
+    	if (y < -joystick_deadzone)
+    		y = -joystick_speed;
+    	else if (y> joystick_deadzone)
+    		y = joystick_speed;
+    	else
+    		y = 0;
+    	
+    	Vector2D mov = *(new Vector2D(x, y));
+    	mov.Normalizar();
+    	mov = mov * joystick_speed;
+    	mario.Mover(mov);
     	
     	mario.Renderizar();
+    	mundo1->Renderizar();
         
     	SDL_RenderPresent(renderer);
     	SDL_Delay(wait);
