@@ -64,12 +64,13 @@ Vector2D& operator *(const Vector2D &v1, const float &f1)
 struct Entidad
 {
 	SDL_Texture *textura;
-	SDL_Rect posicion;
+	SDL_Rect posicion;	
 
 	Entidad()
 	{
 		textura = NULL;
 		posicion = {0, 0, 0, 0};
+		
 	}
 	
 	void Ubicar(const Vector2D pos)
@@ -123,6 +124,59 @@ struct EntidadDinamica : Entidad
 	{
 		posicion.x += int(x);
 		posicion.y += int(y);
+	}
+};
+
+struct EntidadDinamicaAnimada : EntidadDinamica
+{
+	SDL_Texture* frames[64];
+	int nFrames;
+	int nTicksPorFrame;
+	int tickActual;
+	
+	EntidadDinamicaAnimada() : EntidadDinamica()
+	{}
+	
+	SDL_Texture* ObtenerTextura(const char* ruta)
+	{
+		SDL_Surface* img = IMG_Load(ruta);
+		SDL_Texture* tex = NULL;
+		if (img)
+		{
+			tex = SDL_CreateTextureFromSurface(renderer, img);
+			SDL_FreeSurface(img);
+		}
+		return tex;
+	} 
+	
+	void CrearAnimacion(const int nFrames, const int nTicksPorFrame, const char* rutas[])
+	{
+		this->nFrames = nFrames;
+		this->nTicksPorFrame = nTicksPorFrame;
+		for (int i = 0; i < nFrames; i++)
+		{
+			frames[i] = ObtenerTextura(rutas[i]);
+		}
+		tickActual = 0;
+	}
+	
+	void Renderizar()
+	{
+		tickActual++;
+		for (int i = 0; i < nFrames; i++)
+		{
+			if (tickActual <= i * nTicksPorFrame + nTicksPorFrame)
+			{
+				textura = frames[i];
+				break;
+			}
+		}
+		if (tickActual > nFrames * nTicksPorFrame + nTicksPorFrame)
+		{
+			tickActual = 0;
+			textura = frames[0];
+		}
+		EntidadDinamica::Renderizar();
 	}
 };
 
