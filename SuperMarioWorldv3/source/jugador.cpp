@@ -21,15 +21,16 @@ void Jugador::IniciarCuerpoFisico(b2World* world)
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.1f, (posicion.y + posicion.h / 2.0f) * 0.1f);
+	bodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.01f, (posicion.y + posicion.h / 2.0f) * 0.01f);
 	cuerpoFisico = world->CreateBody(&bodyDef);
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox((posicion.w / 2.0f) * 0.1f, (posicion.h / 2.0f) * 0.1f);
+	b2CircleShape circle;
+	circle.m_radius = (posicion.w / 2.0f) * 0.01f;
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
+	fixtureDef.shape = &circle;
 	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.1f;
+	fixtureDef.friction = 0.2f;
 	cuerpoFisico->CreateFixture(&fixtureDef);
+	cuerpoFisico->SetFixedRotation(true);
 }
 
 Jugador::Jugador(Camara* camara, b2World* world)
@@ -136,10 +137,10 @@ void Jugador::Movimiento(int x)
 
 void Jugador::Renderizar(int x)
 {
-	posicion.x = cuerpoFisico->GetPosition().x * 10.0f - posicion.w / 2.0f;
-	posicion.y = cuerpoFisico->GetPosition().y * 10.0f - posicion.h / 2.0f;
-	camara->x = cuerpoFisico->GetPosition().x * 10.0f - SCREEN_W / 2.0f;
-	camara->y = cuerpoFisico->GetPosition().y * 10.0f - SCREEN_H / 2.0f;
+	posicion.x = cuerpoFisico->GetPosition().x * 100.0f - posicion.w / 2.0f;
+	posicion.y = cuerpoFisico->GetPosition().y * 100.0f - posicion.h / 2.0f - 2;
+	camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
+	camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	SDL_Rect posicionDibujo;

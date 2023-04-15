@@ -20,10 +20,10 @@ void Suelo::CargarTextura(const char* ruta)
 void Suelo::IniciarCuerpoFisico(b2World* world)
 {
 	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.1f, (posicion.y + posicion.h / 2.0f) * 0.1f);
+	groundBodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.01f, (posicion.y + posicion.h / 2.0f) * 0.01f);
 	cuerpoFisico = world->CreateBody(&groundBodyDef);
 	b2PolygonShape groundBox;
-	groundBox.SetAsBox((posicion.w / 2.0f) * 0.1f, (posicion.h / 2.0f)  * 0.1f);
+	groundBox.SetAsBox((posicion.w / 2.0f) * 0.01f, (posicion.h / 2.0f)  * 0.01f);
 	cuerpoFisico->CreateFixture(&groundBox, 0.0f);
 }
 

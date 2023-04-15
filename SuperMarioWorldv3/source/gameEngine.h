@@ -67,9 +67,9 @@ struct Jugador
 		Muerte	
 	};
 	
-	const int maxVelocidad = 10;
-	const int accel = 1;
-	int velocidad;
+	const float maxVelocidad = 2.0f;
+	const float accel = 0.05f;
+	float velocidad;
 	Camara* camara;
 	b2Body* cuerpoFisico;
 	SDL_Texture* agachado[4];
