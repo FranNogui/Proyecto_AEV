@@ -111,6 +111,140 @@ private:
 	void IniciarCuerpoFisico(b2World* world);
 };
 
+struct Tuberia
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	Tuberia(int tipo, float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct BloqueGiratorio
+{
+	Animacion animacion;
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	BloqueGiratorio(float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct BloqueInterrogante
+{
+	Animacion animacion;
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	BloqueInterrogante(float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct BloqueNube
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	BloqueNube(float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct BloquePiedra
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	BloquePiedra(float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct Decoracion
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	
+	Decoracion(int tipo, float x, float y, Camara* camara);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);	
+};
+
+struct MonedaYoshi
+{
+	Animacion animacion;
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	MonedaYoshi(float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct Plataforma
+{
+	Camara* camara;
+	SDL_Texture *textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	
+	Plataforma(int tipo, float x, float y, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct Fondo
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	
+	Fondo(int tipo, float x, float y, Camara* camara);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+};
+
 struct Mapa
 {
 	int fondoR;
@@ -119,6 +253,15 @@ struct Mapa
 	int ancho;
 	int alto;
 	vector<Suelo> suelos;
+	vector<Tuberia> tuberias;
+	vector<BloqueGiratorio> bGiratorios;
+	vector<BloqueInterrogante> bInterrogantes;
+	vector<BloqueNube> bNubes;
+	vector<BloquePiedra> bPiedras;
+	vector<Decoracion> decoraciones;
+	vector<MonedaYoshi> monedasYoshi;
+	vector<Plataforma> plataformas;
+	vector<Fondo> fondos;
 	
 	Mapa(const char* ruta, Camara* camara, b2World* world);
 	void Renderizar();

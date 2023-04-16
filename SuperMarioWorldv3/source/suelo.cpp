@@ -72,8 +72,8 @@ void Suelo::Renderizar()
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	if (textura && 
-		posicionDibujoX > -50 && posicionDibujoX < SCREEN_W + 50 && 
-		posicionDibujoY > -50 && posicionDibujoY < SCREEN_H + 50)
+		posicionDibujoX + posicion.w > -50 && posicionDibujoX < SCREEN_W + 50 && 
+		posicionDibujoY > -50 && posicionDibujoY + posicion.h < SCREEN_H + 50)
 	{
 		SDL_Rect posicionDibujo;
 		posicionDibujo = {posicionDibujoX, posicionDibujoY, posicion.w, posicion.h};

@@ -139,8 +139,8 @@ void Jugador::Renderizar(int x)
 {
 	posicion.x = cuerpoFisico->GetPosition().x * 100.0f - posicion.w / 2.0f;
 	posicion.y = cuerpoFisico->GetPosition().y * 100.0f - posicion.h / 2.0f - 2;
-	camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
-	camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
+	//camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
+	//camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	SDL_Rect posicionDibujo;
@@ -231,6 +231,18 @@ void Jugador::Renderizar(int x)
 			}
 			else
 				cuerpoFisico->SetLinearVelocity(b2Vec2(velocidad, cuerpoFisico->GetLinearVelocity().y));
+			break;
+		case Agachado:
+			break;
+		case Cayendo:
+			break;
+		case QuietoArriba:
+			break;
+		case Saltando:
+			break;
+		case SaltoCorriendo:
+			break;
+		case Muerte:
 			break;
 	}
 }

@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	
     while (!exit_requested && appletMainLoop()) 
 	{
-        SDL_SetRenderDrawColor(renderer, 120, 120, 120, 0xFF);
+        SDL_SetRenderDrawColor(renderer, mundo1.fondoR, mundo1.fondoG, mundo1.fondoB, 0xFF);
         SDL_RenderClear(renderer);
     
     	// Manejar la entrada del joystick
@@ -57,6 +57,9 @@ int main(int argc, char** argv)
     		y = joystick_speed;
     	else
     		y = 0;
+    		
+    	camara.x += 6 * x;
+    	camara.y += 6 * y;
 
 		mundo1.Renderizar();
 		mario.Renderizar(x);
@@ -65,6 +68,7 @@ int main(int argc, char** argv)
     	SDL_RenderPresent(renderer);
     }
     
+    mundo1.Destruir();
     IMG_Quit();
     SDL_Quit();
     romfsExit();

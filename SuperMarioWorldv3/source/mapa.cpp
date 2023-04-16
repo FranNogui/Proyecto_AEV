@@ -30,7 +30,7 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		{
 			mapa >> act;
 			if (act != 0)
-			{}
+				tuberias.push_back(*(new Tuberia(act, j * pixeles, i * pixeles, camara, world)));
 		}
 	}
 	
@@ -41,7 +41,23 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		{
 			mapa >> act;
 			if (act != 0)
-			{}
+			{
+				switch (act)
+				{
+					case 1:
+						bGiratorios.push_back(*(new BloqueGiratorio(j * pixeles, i * pixeles, camara, world)));
+						break;
+					case 2:
+						bInterrogantes.push_back(*(new BloqueInterrogante(j * pixeles, i * pixeles, camara, world)));
+						break;
+					case 3:
+						bNubes.push_back(*(new BloqueNube(j * pixeles, i * pixeles, camara, world)));
+						break;
+					case 4:
+						bPiedras.push_back(*(new BloquePiedra(j * pixeles, i * pixeles, camara, world)));
+						break;
+				}
+			}
 		}
 	}
 	
@@ -52,7 +68,7 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		{
 			mapa >> act;
 			if (act != 0)
-			{}
+				decoraciones.push_back(*(new Decoracion(act, j * pixeles, i * pixeles, camara)));
 		}
 	}
 	
@@ -63,7 +79,7 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		{
 			mapa >> act;
 			if (act != 0)
-			{}
+				monedasYoshi.push_back(*(new MonedaYoshi(j * pixeles, i * pixeles, camara, world)));
 		}
 	}
 	
@@ -77,7 +93,7 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 			{
 				mapa >> act;
 				if (act != 0)
-				{}
+					plataformas.push_back(*(new Plataforma(act, j * pixeles, i * pixeles, camara, world)));
 			}
 		}
 	}
@@ -87,20 +103,57 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 	mapa >> fondoAct;
 	while (posFondo < ancho * pixeles)
 	{
-		
+		fondos.push_back(*(new Fondo(fondoAct, posFondo, 0.0f, camara)));
+		posFondo += 512;
 	}
 	mapa.close();
 }
 
 void Mapa::Renderizar()
 {
+	for (std::size_t i = 0; i < fondos.size(); i++)
+		fondos[i].Renderizar();
+	for (std::size_t i = 0; i < decoraciones.size(); i++)
+		decoraciones[i].Renderizar();
 	for (std::size_t i = 0; i < suelos.size(); i++)
 		suelos[i].Renderizar();
+	for (std::size_t i = 0; i < plataformas.size(); i++)
+		plataformas[i].Renderizar();
+	for (std::size_t i = 0; i < tuberias.size(); i++)
+		tuberias[i].Renderizar();
+	for (std::size_t i = 0; i < bGiratorios.size(); i++)
+		bGiratorios[i].Renderizar();
+	for (std::size_t i = 0; i < bInterrogantes.size(); i++)
+		bInterrogantes[i].Renderizar();
+	for (std::size_t i = 0; i < bNubes.size(); i++)
+		bNubes[i].Renderizar();
+	for (std::size_t i = 0; i < bPiedras.size(); i++)
+		bPiedras[i].Renderizar();
+	for (std::size_t i = 0; i < monedasYoshi.size(); i++)
+		monedasYoshi[i].Renderizar();
 }
 
 void Mapa::Destruir()
 {
+	for (std::size_t i = 0; i < fondos.size(); i++)
+		fondos[i].Destruir();
+	for (std::size_t i = 0; i < decoraciones.size(); i++)
+		decoraciones[i].Destruir();
 	for (std::size_t i = 0; i < suelos.size(); i++)
 		suelos[i].Destruir();
+	for (std::size_t i = 0; i < plataformas.size(); i++)
+		plataformas[i].Destruir();
+	for (std::size_t i = 0; i < tuberias.size(); i++)
+		tuberias[i].Destruir();
+	for (std::size_t i = 0; i < bGiratorios.size(); i++)
+		bGiratorios[i].Destruir();
+	for (std::size_t i = 0; i < bInterrogantes.size(); i++)
+		bInterrogantes[i].Destruir();
+	for (std::size_t i = 0; i < bNubes.size(); i++)
+		bNubes[i].Destruir();
+	for (std::size_t i = 0; i < bPiedras.size(); i++)
+		bPiedras[i].Destruir();
+	for (std::size_t i = 0; i < monedasYoshi.size(); i++)
+		monedasYoshi[i].Destruir();
 }
 

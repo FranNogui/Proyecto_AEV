@@ -45,19 +45,21 @@ void Animacion::Reiniciar()
 void Animacion::Renderizar()
 {
 	tickActual++;
+	if (tickActual >= nFrames * nTicksPorFrame + nTicksPorFrame)
+	{
+		tickActual = -1;
+		textura = frames[0];
+		return;
+	}
 	for (int i = 0; i < nFrames; i++)
 	{
-		if (tickActual <= i * nTicksPorFrame + nTicksPorFrame)
+		if (tickActual < i * nTicksPorFrame + nTicksPorFrame)
 		{
 			textura = frames[i];
 			break;
 		}
 	}
-	if (tickActual > nFrames * nTicksPorFrame + nTicksPorFrame)
-	{
-		tickActual = 0;
-		textura = frames[0];
-	}
+	
 }
 
 void Animacion::Destruir()
