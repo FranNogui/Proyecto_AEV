@@ -15,4 +15,6 @@
 #define SCREEN_W 256
 #define SCREEN_H 224
 
+#define TIPO_GROUND_CHECK 1
+
 #endif

@@ -10,6 +10,8 @@ int main(int argc, char** argv)
 	
 	b2Vec2 gravity(0.0, 10.0f);
 	b2World world(gravity);
+	DetectorDeColisiones detector;
+	world.SetContactListener(&detector);
 	
 	int exit_requested = 0;
 
@@ -58,11 +60,11 @@ int main(int argc, char** argv)
     	else
     		y = 0;
     		
-    	camara.x += 6 * x;
-    	camara.y += 6 * y;
+    	//camara.x += 6 * x;
+    	//camara.y += 6 * y;
 
 		mundo1.Renderizar();
-		mario.Renderizar(x);
+		mario.Renderizar(x, SDL_JoystickGetButton(joystick, 0));
 
     	world.Step(1.0f / 60.0f, 6, 2);
     	SDL_RenderPresent(renderer);

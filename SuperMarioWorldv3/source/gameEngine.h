@@ -26,6 +26,17 @@ using namespace std;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 
+struct FixtureData
+{
+	int tipo;	
+};
+
+class DetectorDeColisiones : public b2ContactListener
+{
+	void BeginContact(b2Contact* contact);
+	void EndContact(b2Contact* contact);	
+};
+
 struct Camara
 {
 	float x;
@@ -90,7 +101,7 @@ struct Jugador
 	
 	Jugador(Camara* camara, b2World* world);
 	void Movimiento(int x);
-	void Renderizar(int x);
+	void Renderizar(int x, bool saltado);
 private:
 	SDL_Texture* CargarTextura(const char* ruta);
 	void IniciarCuerpoFisico(b2World* world);

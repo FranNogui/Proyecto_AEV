@@ -4,6 +4,9 @@ using namespace std;
 
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
+int numGroundChecks = 0;
+const int ticksJumpDelay = 10;
+int actJumpTicks = 0;
 
 SDL_Texture* Jugador::CargarTextura(const char* ruta)
 {
@@ -31,6 +34,14 @@ void Jugador::IniciarCuerpoFisico(b2World* world)
 	fixtureDef.friction = 0.2f;
 	cuerpoFisico->CreateFixture(&fixtureDef);
 	cuerpoFisico->SetFixedRotation(true);
+	b2PolygonShape polygonShape;
+	polygonShape.SetAsBox(0.1, 0.1, b2Vec2(0, 0.05), 0);
+	FixtureData* data = new FixtureData;
+	data->tipo = TIPO_GROUND_CHECK;
+	fixtureDef.shape = &polygonShape;
+	fixtureDef.isSensor = true;
+	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data);
+	cuerpoFisico->CreateFixture(&fixtureDef);
 }
 
 Jugador::Jugador(Camara* camara, b2World* world)
@@ -135,12 +146,11 @@ void Jugador::Movimiento(int x)
 	cuerpoFisico->SetLinearVelocity(b2Vec2(x * maxVelocidad, cuerpoFisico->GetLinearVelocity().y));
 }
 
-void Jugador::Renderizar(int x)
+void Jugador::Renderizar(int x, bool saltado)
 {
-	posicion.x = cuerpoFisico->GetPosition().x * 100.0f - posicion.w / 2.0f;
-	posicion.y = cuerpoFisico->GetPosition().y * 100.0f - posicion.h / 2.0f - 2;
-	//camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
-	//camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
+	posicion.x = floor(cuerpoFisico->GetPosition().x * 100.0f) - posicion.w / 2.0f;
+	posicion.y = floor(cuerpoFisico->GetPosition().y * 100.0f) - posicion.h / 2.0f - 2;
+	camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	SDL_Rect posicionDibujo;
@@ -153,6 +163,10 @@ void Jugador::Renderizar(int x)
 	{
 		case Quieto:
 			SDL_RenderCopy(renderer, quieto[direccion + tamanyo], NULL, &posicionDibujo);
+			if (saltado && numGroundChecks > 0)
+				estado = Saltando;
+			if (numGroundChecks == 0)
+				estado = Cayendo;
 			if (cuerpoFisico->GetLinearVelocity().x > 0 && x > 0)
 			{
 				direccion = 0;
@@ -170,6 +184,10 @@ void Jugador::Renderizar(int x)
 			for (int i = 0; i < 4; i++)
 				corriendo[i].Renderizar();
 			SDL_RenderCopy(renderer, corriendo[direccion + tamanyo].textura, NULL, &posicionDibujo);
+			if (saltado && numGroundChecks > 0)
+				estado = Saltando;	
+			if (numGroundChecks == 0)
+				estado = Cayendo;	
 			if (cuerpoFisico->GetLinearVelocity().x == 0)
 			{
 				estado = Quieto;
@@ -211,6 +229,10 @@ void Jugador::Renderizar(int x)
 			break;
 		case CambioDir:
 			SDL_RenderCopy(renderer, cambioDir[direccion + tamanyo], NULL, &posicionDibujo);
+			if (saltado && numGroundChecks > 0)
+				estado = Saltando;
+			if (numGroundChecks == 0)
+				estado = Cayendo;
 			if ((direccion == 0 && x <= 0) || (direccion == 1 && x >= 0))
 			{
 				direccion = (direccion + 1) % 2;
@@ -225,6 +247,8 @@ void Jugador::Renderizar(int x)
 			for (int i = 0; i < 4; i++)
 				sprint[i].Renderizar();
 			SDL_RenderCopy(renderer, sprint[direccion + tamanyo].textura, NULL, &posicionDibujo);
+			if (saltado && numGroundChecks > 0)
+				estado = Saltando;
 			if (!signbit(x) != direccion || x == 0 || abs(cuerpoFisico->GetLinearVelocity().x) < maxVelocidad - 10)
 			{
 				estado = Corriendo;
@@ -235,10 +259,23 @@ void Jugador::Renderizar(int x)
 		case Agachado:
 			break;
 		case Cayendo:
+			if (numGroundChecks > 0 && actJumpTicks >= ticksJumpDelay) 
+			{				
+				camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
+				estado = Corriendo;
+				actJumpTicks = 0;
+			}
+			else if (actJumpTicks < ticksJumpDelay)
+				actJumpTicks++;
+			if (cuerpoFisico->GetLinearVelocity().y < 0) SDL_RenderCopy(renderer, saltando[direccion + tamanyo], NULL, &posicionDibujo);
+			else SDL_RenderCopy(renderer, cayendo[direccion + tamanyo], NULL, &posicionDibujo);
 			break;
 		case QuietoArriba:
 			break;
 		case Saltando:
+			SDL_RenderCopy(renderer, saltando[direccion + tamanyo], NULL, &posicionDibujo);
+			cuerpoFisico->ApplyLinearImpulse( b2Vec2(0, -0.2), cuerpoFisico->GetWorldCenter(), true );
+			estado = Cayendo;
 			break;
 		case SaltoCorriendo:
 			break;
