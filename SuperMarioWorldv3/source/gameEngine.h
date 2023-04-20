@@ -381,12 +381,12 @@ private:
 
 struct Interfaz
 {
-	vector<ObjetoInterfazEstatico> objetosEstaticos;
-	NumeroVidas numVidas;
-	Contenedor contenedor;
-	TiempoInterfaz tiempo;
-	MonedasInterfaz monedas;
-	PuntuacionInterfaz puntuacion;
+	vector<ObjetoInterfazEstatico*> objetosEstaticos;
+	NumeroVidas* numVidas;
+	Contenedor* contenedor;
+	TiempoInterfaz* tiempo;
+	MonedasInterfaz* monedas;
+	PuntuacionInterfaz* puntuacion;
 	
 	Interfaz();
 	void Renderizar();
