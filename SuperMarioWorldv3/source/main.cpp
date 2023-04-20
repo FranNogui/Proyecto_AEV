@@ -34,6 +34,7 @@ int main(int argc, char** argv)
 	Camara camara(0.0f, 0.0f);
 	Mapa mundo1(RUTA_MAPA_MUNDO_1, &camara, &world);
 	Jugador mario(&camara, &world);
+	camara.AsignarJugador(&mario);
 	
     while (!exit_requested && appletMainLoop()) 
 	{

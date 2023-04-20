@@ -26,6 +26,8 @@ using namespace std;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 
+struct Jugador;
+
 struct FixtureData
 {
 	int tipo;	
@@ -39,10 +41,16 @@ class DetectorDeColisiones : public b2ContactListener
 
 struct Camara
 {
-	float x;
-	float y;
+	const float velocidad = 0.8f;
+	int x;
+	int y;
+	float xReal;
+	float yReal;
+	Jugador* jugador;
 	
 	Camara(float x, float y);
+	void AsignarJugador(Jugador* jugador);
+	void Actualizar();
 };
 
 struct Animacion
@@ -275,6 +283,112 @@ struct Mapa
 	vector<Fondo> fondos;
 	
 	Mapa(const char* ruta, Camara* camara, b2World* world);
+	void Renderizar();
+	void Destruir();
+};
+
+struct ObjetoInterfazEstatico
+{
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	
+	ObjetoInterfazEstatico(float x, float y, const char* ruta);
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+};
+
+struct NumeroVidas
+{
+	SDL_Texture* numeros[10];
+	SDL_Texture* vidas[2];
+	SDL_Rect posicion[2];
+	int numVidas;
+	
+	NumeroVidas(float x, float y, int numVidasInicial);
+	void CambiarVida(int incremento);
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
+struct Contenedor
+{
+	SDL_Texture* contenedores[2];
+	SDL_Texture* contenedor;
+	SDL_Rect posicion;
+	bool conSeta;
+	
+	Contenedor(float x, float y, bool conSeta);
+	void CambiarSeta();
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
+struct TiempoInterfaz
+{
+	SDL_Texture* numeros[10];
+	SDL_Texture* tiempo[3];
+	SDL_Rect posicion[3];
+	int tiempoAct;
+	long long tiempoInicio;
+	
+	TiempoInterfaz(float x, float y, int tiempoInicial);
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
+struct MonedasInterfaz
+{
+	SDL_Texture* numeros[10];
+	SDL_Texture* monedas[2];
+	SDL_Rect posicion[2];
+	int monedasAct;
+	
+	MonedasInterfaz(float x, float y, int monedasInicial);
+	void CambiarMonedas(int incremento);
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
+struct PuntuacionInterfaz
+{
+	SDL_Texture* numeros[10];
+	SDL_Texture* puntuacion[7];
+	SDL_Rect posicion[7];
+	int puntuacionAct;
+	
+	PuntuacionInterfaz(float x, float y, int puntuacionInicial);
+	void CambiarPuntuacion(int incremento);
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
+struct Interfaz
+{
+	vector<ObjetoInterfazEstatico> objetosEstaticos;
+	NumeroVidas numVidas;
+	Contenedor contenedor;
+	TiempoInterfaz tiempo;
+	MonedasInterfaz monedas;
+	PuntuacionInterfaz puntuacion;
+	
+	Interfaz();
 	void Renderizar();
 	void Destruir();
 };

@@ -31,17 +31,18 @@ void Jugador::IniciarCuerpoFisico(b2World* world)
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &circle;
 	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.2f;
+	fixtureDef.friction = 0.0f;
 	cuerpoFisico->CreateFixture(&fixtureDef);
 	cuerpoFisico->SetFixedRotation(true);
 	b2PolygonShape polygonShape;
-	polygonShape.SetAsBox(0.1, 0.1, b2Vec2(0, 0.05), 0);
+	polygonShape.SetAsBox(0.05, 0.05, b2Vec2(0, 0.12), 0);
 	FixtureData* data = new FixtureData;
 	data->tipo = TIPO_GROUND_CHECK;
 	fixtureDef.shape = &polygonShape;
 	fixtureDef.isSensor = true;
 	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data);
 	cuerpoFisico->CreateFixture(&fixtureDef);
+	cuerpoFisico->SetFixedRotation(true);
 }
 
 Jugador::Jugador(Camara* camara, b2World* world)
@@ -150,7 +151,7 @@ void Jugador::Renderizar(int x, bool saltado)
 {
 	posicion.x = floor(cuerpoFisico->GetPosition().x * 100.0f) - posicion.w / 2.0f;
 	posicion.y = floor(cuerpoFisico->GetPosition().y * 100.0f) - posicion.h / 2.0f - 2;
-	camara->x = cuerpoFisico->GetPosition().x * 100.0f - SCREEN_W / 2.0f;
+	camara->Actualizar();
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	SDL_Rect posicionDibujo;
@@ -261,20 +262,27 @@ void Jugador::Renderizar(int x, bool saltado)
 		case Cayendo:
 			if (numGroundChecks > 0 && actJumpTicks >= ticksJumpDelay) 
 			{				
-				camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
+				//camara->y = cuerpoFisico->GetPosition().y * 100.0f - SCREEN_H / 2.0f;
 				estado = Corriendo;
 				actJumpTicks = 0;
 			}
 			else if (actJumpTicks < ticksJumpDelay)
 				actJumpTicks++;
+			velocidad += accel * x * 0.75f;
+			if (velocidad < -maxVelocidad) velocidad = -maxVelocidad;
+			if (velocidad > maxVelocidad) velocidad = maxVelocidad;
+			cuerpoFisico->SetLinearVelocity(b2Vec2(velocidad, cuerpoFisico->GetLinearVelocity().y));
 			if (cuerpoFisico->GetLinearVelocity().y < 0) SDL_RenderCopy(renderer, saltando[direccion + tamanyo], NULL, &posicionDibujo);
 			else SDL_RenderCopy(renderer, cayendo[direccion + tamanyo], NULL, &posicionDibujo);
 			break;
 		case QuietoArriba:
 			break;
 		case Saltando:
+			velocidad += accel * x * 0.75f;
+			if (velocidad < -maxVelocidad) velocidad = -maxVelocidad;
+			if (velocidad > maxVelocidad) velocidad = maxVelocidad;
 			SDL_RenderCopy(renderer, saltando[direccion + tamanyo], NULL, &posicionDibujo);
-			cuerpoFisico->ApplyLinearImpulse( b2Vec2(0, -0.2), cuerpoFisico->GetWorldCenter(), true );
+			cuerpoFisico->ApplyLinearImpulse( b2Vec2(0, -0.12), cuerpoFisico->GetWorldCenter(), true );
 			estado = Cayendo;
 			break;
 		case SaltoCorriendo:
