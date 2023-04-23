@@ -5,6 +5,7 @@
 #include "constantes.h"
 
 #include <time.h>
+#include <chrono>
 #include <unistd.h>
 #include <math.h>
 #include <fstream>
