@@ -12,6 +12,11 @@ SDL_Texture* MonedasInterfaz::CargarTextura(const char* ruta)
 	if (img)
 	{
 		tex = SDL_CreateTextureFromSurface(renderer, img);
+		for (int i = 0; i < 2; i++)
+		{
+			posicion[i].w = img->w;
+			posicion[i].h = img->h;
+		}
 		SDL_FreeSurface(img);
 	}
 	return tex;
@@ -34,12 +39,13 @@ void MonedasInterfaz::CargarTexturas()
 
 MonedasInterfaz::MonedasInterfaz(float x, float y, int monedasInicial)
 {
-	posicion[0].x = x;
-	posicion[0].y = y;
-	posicion[1].x = x + 20;
-	posicion[1].y = y;
 	monedasAct = monedasInicial;
 	CargarTexturas();
+	for (int i = 0; i < 2; i++)
+	{
+		posicion[i].x = x + posicion[i].w * i;
+		posicion[i].y = y;
+	}
 	switch(monedasAct / 10)
 	{
 		case 0:

@@ -12,6 +12,11 @@ SDL_Texture* PuntuacionInterfaz::CargarTextura(const char* ruta)
 	if (img)
 	{
 		tex = SDL_CreateTextureFromSurface(renderer, img);
+		for (int i = 0; i < 7; i++)
+		{
+			posicion[i].w = img->w;
+			posicion[i].h = img->h;
+		}
 		SDL_FreeSurface(img);
 	}
 	return tex;
@@ -34,22 +39,13 @@ void PuntuacionInterfaz::CargarTexturas()
 
 PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 {
-	posicion[0].x = x;
-	posicion[0].y = y;
-	posicion[1].x = x + 20;
-	posicion[1].y = y;
-	posicion[2].x = x + 40;
-	posicion[2].y = y;
-	posicion[3].x = x + 60;
-	posicion[3].y = y;
-	posicion[4].x = x + 80;
-	posicion[4].y = y;
-	posicion[5].x = x + 100;
-	posicion[5].y = y;
-	posicion[6].x = x + 120;
-	posicion[6].y = y;
 	puntuacionAct = puntuacionInicial;
 	CargarTexturas();
+	for (int i = 0; i < 7; i++)
+	{
+		posicion[i].x = x + posicion[i].w * i;
+		posicion[i].y = y;
+	}
 	for(int i = 6; i > 0; i--){
 		switch(puntuacionAct % 10)
 		{

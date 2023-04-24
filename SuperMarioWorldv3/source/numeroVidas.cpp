@@ -12,6 +12,11 @@ SDL_Texture* NumeroVidas::CargarTextura(const char* ruta)
 	if (img)
 	{
 		tex = SDL_CreateTextureFromSurface(renderer, img);
+		for (int i = 0; i < 2; i++)
+		{
+			posicion[i].w = img->w;
+			posicion[i].h = img->h;
+		}
 		SDL_FreeSurface(img);
 	}
 	return tex;
@@ -34,12 +39,13 @@ void NumeroVidas::CargarTexturas()
 
 NumeroVidas::NumeroVidas(float x, float y, int numVidasInicial)
 {
-	posicion[0].x = x;
-	posicion[0].y = y;
-	posicion[1].x = x + 20;
-	posicion[1].y = y;
 	numVidas = numVidasInicial;
 	CargarTexturas();
+	for (int i = 0; i < 2; i++)
+	{
+		posicion[i].x = x + posicion[i].w * i;
+		posicion[i].y = y;
+	}
 	switch(numVidas / 10)
 	{
 		case 0:

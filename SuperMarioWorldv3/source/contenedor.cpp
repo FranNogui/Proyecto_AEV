@@ -12,6 +12,8 @@ SDL_Texture* Contenedor::CargarTextura(const char* ruta)
 	if (img)
 	{
 		tex = SDL_CreateTextureFromSurface(renderer, img);
+		posicion.w = img->w;
+		posicion.h = img->h;
 		SDL_FreeSurface(img);
 	}
 	return tex;

@@ -12,6 +12,11 @@ SDL_Texture* TiempoInterfaz::CargarTextura(const char* ruta)
 	if (img)
 	{
 		tex = SDL_CreateTextureFromSurface(renderer, img);
+		for (int i = 0; i < 3; i++)
+		{
+			posicion[i].w = img->w;
+			posicion[i].h = img->h;
+		}
 		SDL_FreeSurface(img);
 	}
 	return tex;
@@ -32,20 +37,19 @@ void TiempoInterfaz::CargarTexturas()
 }
 
 
-
 TiempoInterfaz::TiempoInterfaz(float x, float y, int tiempoInicial)
 {
-	posicion[0].x = x;
-	posicion[0].y = y;
-	posicion[1].x = x + 20;
-	posicion[1].y = y;
-	posicion[2].x = x + 40;
-	posicion[2].y = y;
 	CargarTexturas();
+	for (int i = 0; i < 3; i++)
+	{
+		posicion[i].x = x + posicion[i].w * i;
+		posicion[i].y = y;
+	}
+	//tiempoInicio = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    //int segundosPasados = (tiempoInicio - tiempoInicial) / 1000; // diferencia en segundos
+    //tiempoAct = tiempoInicial - segundosPasados;
 	
-	tiempoInicio = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    int segundosPasados = (tiempoInicio - tiempoInicial) / 1000; // diferencia en segundos
-    tiempoAct = tiempoInicial - segundosPasados;
+	tiempoAct = tiempoInicial;
 
 	switch(tiempoAct / 100)
 	{

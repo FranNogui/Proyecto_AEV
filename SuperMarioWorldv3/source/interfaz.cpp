@@ -7,15 +7,15 @@ extern SDL_Window* window;
 
 Interfaz::Interfaz()
 {
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 0, RUTA_MARIO_TEXTO));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 0, RUTA_VIDA_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 0, RUTA_TIME_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 0, RUTA_DINERO_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 20, RUTA_MARIO_TEXTO));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(40, 20, RUTA_VIDA_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(80, 20, RUTA_TIME_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(120, 20, RUTA_DINERO_INTERFAZ));
     numVidas = new NumeroVidas(0, 0, 5);
-    contenedor = new Contenedor(0, 0, false);
-    tiempo = new TiempoInterfaz(0, 0, 300);
-    monedas = new MonedasInterfaz(0, 0, 20);
-    puntuacion = new PuntuacionInterfaz(0, 0, 54321);
+    contenedor = new Contenedor(40, 0, false);
+    tiempo = new TiempoInterfaz(80, 0, 300);
+    monedas = new MonedasInterfaz(120, 0, 20);
+    puntuacion = new PuntuacionInterfaz(160, 0, 54321);
 }
 
 void Interfaz::Renderizar()
