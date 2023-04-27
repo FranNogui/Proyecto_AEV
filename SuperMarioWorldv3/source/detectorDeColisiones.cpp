@@ -24,6 +24,15 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 			case TIPO_MONEDA:
 				data->moneda->Recoger();
 				break;
+			case TIPO_HONGO:
+				data->hongo->Recoger();
+				break;
+			case TIPO_HONGO_VIDA:
+				data->hongoVida->Recoger();
+				break;
+			case TIPO_BLOQUE_INTERROGANTE:
+				data->bloqueInterrogante->Golpear();
+				break;
 		}
 	}
 	
@@ -40,6 +49,15 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 				break;
 			case TIPO_MONEDA:
 				data->moneda->Recoger();
+				break;
+			case TIPO_HONGO:
+				data->hongo->Recoger();
+				break;
+			case TIPO_HONGO_VIDA:
+				data->hongoVida->Recoger();
+				break;
+			case TIPO_BLOQUE_INTERROGANTE:
+				data->bloqueInterrogante->Golpear();
 				break;
 		}
 	}

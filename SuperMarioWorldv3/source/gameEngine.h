@@ -28,6 +28,9 @@ struct Jugador;
 struct Interfaz;
 struct MonedaYoshi;
 struct Moneda;
+struct Hongo;
+struct HongoVida;
+struct BloqueInterrogante;
 
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
@@ -38,6 +41,9 @@ struct FixtureData
 	int tipo;	
 	MonedaYoshi* monedaYoshi;
 	Moneda* moneda;	
+	Hongo* hongo;
+	HongoVida* hongoVida;
+	BloqueInterrogante* bloqueInterrogante;
 };
 
 class DetectorDeColisiones : public b2ContactListener
@@ -175,8 +181,10 @@ struct BloqueInterrogante
 	SDL_Texture* textura;
 	SDL_Rect posicion;
 	b2Body* cuerpoFisico;
+	bool golpeado;
 	
 	BloqueInterrogante(float x, float y, Camara* camara, b2World* world);
+	void Golpear();
 	void Renderizar();
 	void Destruir();
 private:
@@ -263,6 +271,40 @@ private:
 	void IniciarCuerpoFisico(b2World* world);		
 };
 
+struct Hongo
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	bool recogido;
+	
+	Hongo(float x, float y, Camara* camara, b2World* world);
+	void Recoger();
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
+struct HongoVida
+{
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	bool recogido;
+	
+	HongoVida(float x, float y, Camara* camara, b2World* world);
+	void Recoger();
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);
+};
+
 struct Plataforma
 {
 	Camara* camara;
@@ -309,6 +351,8 @@ struct Mapa
 	vector<Plataforma*> plataformas;
 	vector<Fondo*> fondos;
 	vector<Moneda*> monedas;
+	vector<Hongo*> hongos;
+	vector<HongoVida*> hongosVida;
 	
 	Mapa(const char* ruta, Camara* camara, b2World* world);
 	void Renderizar();

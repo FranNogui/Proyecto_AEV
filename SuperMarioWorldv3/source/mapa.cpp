@@ -78,10 +78,24 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		for (int j = 0; j < ancho; j++)
 		{
 			mapa >> act;
-			if (act == 1)
-				monedasYoshi.push_back(new MonedaYoshi(j * pixeles, i * pixeles, camara, world));
-			else if (act == 2)
-				monedas.push_back(new Moneda(j * pixeles, i * pixeles, camara, world));
+			if (act != 0)
+			{
+				switch (act)
+				{
+					case 1:
+						monedasYoshi.push_back(new MonedaYoshi(j * pixeles, i * pixeles, camara, world));
+						break;
+					case 2:
+						monedas.push_back(new Moneda(j * pixeles, i * pixeles, camara, world));
+						break;
+					case 3:
+						hongos.push_back(new Hongo(j * pixeles, i * pixeles, camara, world));
+						break;
+					case 4:
+						hongosVida.push_back(new HongoVida(j * pixeles, i * pixeles, camara, world));
+						break;
+				}
+			}
 		}
 	}
 	
@@ -135,6 +149,10 @@ void Mapa::Renderizar()
 		monedasYoshi[i]->Renderizar();
 	for (std::size_t i = 0; i < monedas.size(); i++)
 		monedas[i]->Renderizar();
+	for (std::size_t i = 0; i < hongos.size(); i++)
+		hongos[i]->Renderizar();
+	for (std::size_t i = 0; i < hongosVida.size(); i++)
+		hongosVida[i]->Renderizar();
 }
 
 void Mapa::Destruir()
@@ -161,5 +179,9 @@ void Mapa::Destruir()
 		monedasYoshi[i]->Destruir();
 	for (std::size_t i = 0; i < monedas.size(); i++)
 		monedas[i]->Destruir();
+	for (std::size_t i = 0; i < hongos.size(); i++)
+		hongos[i]->Destruir();
+	for (std::size_t i = 0; i < hongosVida.size(); i++)
+		hongosVida[i]->Destruir();
 }
 

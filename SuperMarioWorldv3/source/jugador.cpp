@@ -150,7 +150,7 @@ void Jugador::Movimiento(int x)
 void Jugador::Renderizar(int x, bool saltado)
 {
 	posicion.x = floor(cuerpoFisico->GetPosition().x * 100.0f) - posicion.w / 2.0f;
-	posicion.y = floor(cuerpoFisico->GetPosition().y * 100.0f) - posicion.h / 2.0f - 2;
+	posicion.y = floor(cuerpoFisico->GetPosition().y * 100.0f) - posicion.h / 2.0f - 3;
 	camara->Actualizar();
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;

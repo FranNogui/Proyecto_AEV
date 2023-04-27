@@ -30,6 +30,7 @@ Contenedor::Contenedor(float x, float y, bool conSeta)
 	posicion.x = x;
 	posicion.y = y;
 	CargarTexturas();
+	this->conSeta = conSeta;
 	if (conSeta)
 		contenedor = contenedores[1];
 	else
@@ -39,17 +40,21 @@ Contenedor::Contenedor(float x, float y, bool conSeta)
 void Contenedor::CambiarSeta()
 {
 	if (conSeta)
+	{
 		conSeta = false;
+		contenedor = contenedores[0];
+	}
 	else
+	{
 		conSeta = true;
+		contenedor = contenedores[1];
+	}
 }
 
 void Contenedor::Renderizar()
 {
-	if (!conSeta)
-		SDL_RenderCopy(renderer, contenedores[0], NULL, &posicion);
-	else
-		SDL_RenderCopy(renderer, contenedores[1], NULL, &posicion);
+	if (contenedor)
+		SDL_RenderCopy(renderer, contenedor, NULL, &posicion);
 }
 
 void Contenedor::Destruir()

@@ -58,7 +58,7 @@ void MonedaYoshi::Recoger()
 {
 	if (!recogida)
 	{
-		interfaz->CambiarNumeroMonedas(1);
+		interfaz->CambiarNumeroEstrellas(1);
 		interfaz->CambiarPuntuacion(500);
 		recogida = true;
 	}

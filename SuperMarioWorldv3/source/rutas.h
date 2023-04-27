@@ -87,6 +87,7 @@
 #define RUTA_CARTEL										"data/otros/Cartel.png"
 #define RUTA_FINAL_NIVEL								"data/otros/Final.png"
 #define RUTA_HONGO										"data/powerups/hongo/Hongo.png"
+#define RUTA_HONGO_VIDA									"data/powerups/hongoVida/HongoVida.png"
 #define RUTA_PLATAFORMA_1								"data/suelos/plataforma/Tile_1.png"
 #define RUTA_PLATAFORMA_2								"data/suelos/plataforma/Tile_2.png"
 #define RUTA_PLATAFORMA_3								"data/suelos/plataforma/Tile_3.png"

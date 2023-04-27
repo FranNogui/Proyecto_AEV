@@ -18,5 +18,8 @@
 #define TIPO_GROUND_CHECK 1
 #define TIPO_MONEDA_YOSHI 2
 #define TIPO_MONEDA 3
+#define TIPO_HONGO 4
+#define TIPO_HONGO_VIDA 5
+#define TIPO_BLOQUE_INTERROGANTE 6
 
 #endif

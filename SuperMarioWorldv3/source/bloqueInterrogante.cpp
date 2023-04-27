@@ -4,6 +4,7 @@ using namespace std;
 
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
+extern Interfaz* interfaz;
 
 void BloqueInterrogante::CargarTextura(const char* ruta)
 {
@@ -25,6 +26,16 @@ void BloqueInterrogante::IniciarCuerpoFisico(b2World* world)
 	b2PolygonShape groundBox;
 	groundBox.SetAsBox((posicion.w / 2.0f) * 0.01f, (posicion.h / 2.0f)  * 0.01f);
 	cuerpoFisico->CreateFixture(&groundBox, 0.0f);
+	b2FixtureDef fixtureDef;
+	b2PolygonShape polygonShape;
+	polygonShape.SetAsBox(0.05, 0.05, b2Vec2(0, 0.12), 0);
+	FixtureData* data = new FixtureData;
+	data->tipo = TIPO_BLOQUE_INTERROGANTE;
+	data->bloqueInterrogante = this;
+	fixtureDef.shape = &polygonShape;
+	fixtureDef.isSensor = true;
+	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data);
+	cuerpoFisico->CreateFixture(&fixtureDef);
 }
 
 BloqueInterrogante::BloqueInterrogante(float x, float y, Camara* camara, b2World* world)
@@ -32,6 +43,7 @@ BloqueInterrogante::BloqueInterrogante(float x, float y, Camara* camara, b2World
 	posicion.x = x;
 	posicion.y = y;
 	this->camara = camara;
+	golpeado = false;
 	CargarTextura(RUTA_BLOQUE_INTERROGANTE_1);
 	const char* rutas[] = {
 		RUTA_BLOQUE_INTERROGANTE_1,
@@ -43,10 +55,23 @@ BloqueInterrogante::BloqueInterrogante(float x, float y, Camara* camara, b2World
 	IniciarCuerpoFisico(world);
 }
 
+void BloqueInterrogante::Golpear()
+{
+	if (!golpeado)
+	{
+		interfaz->CambiarPuntuacion(100);
+		golpeado = true;
+		CargarTextura(RUTA_BLOQUE_INTERROGANTE_5);
+	}
+}
+
 void BloqueInterrogante::Renderizar()
 {
-	animacion.Renderizar();
-	textura = animacion.textura;
+	if (!golpeado)
+	{
+		animacion.Renderizar();
+		textura = animacion.textura;
+	}
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	if (textura && 
