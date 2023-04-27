@@ -391,6 +391,22 @@ private:
 	void CargarTexturas();
 };
 
+struct EstrellasInterfaz
+{
+	SDL_Texture* numeros[10];
+	SDL_Texture* estrellas[2];
+	SDL_Rect posicion[2];
+	int estrellasAct;
+	
+	EstrellasInterfaz(float x, float y, int estrellasInicial);
+	void CambiarEstrellas(int incremento);
+	void Renderizar();
+	void Destruir();
+private:
+	SDL_Texture* CargarTextura(const char* ruta);
+	void CargarTexturas();
+};
+
 struct PuntuacionInterfaz
 {
 	SDL_Texture* numeros[10];
@@ -411,6 +427,7 @@ struct Interfaz
 {
 	vector<ObjetoInterfazEstatico*> objetosEstaticos;
 	NumeroVidas* vidas;
+	EstrellasInterfaz* estrellas;
 	Contenedor* contenedor;
 	TiempoInterfaz* tiempo;
 	MonedasInterfaz* monedas;
@@ -420,6 +437,7 @@ struct Interfaz
 	void CambiarPuntuacion(int numPuntos);
 	void CambiarNumeroMonedas(int numMonedas);
 	void CambiarNumeroVidas(int numVidas);
+	void CambiarNumeroEstrellas(int numEstrellas);
 	void CambiarContenedor();
 	void Renderizar();
 	void Destruir();

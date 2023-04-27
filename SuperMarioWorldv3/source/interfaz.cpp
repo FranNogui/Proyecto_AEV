@@ -13,6 +13,7 @@ Interfaz::Interfaz()
     objetosEstaticos.push_back(new ObjetoInterfazEstatico(202, 15, RUTA_DINERO_INTERFAZ));
     objetosEstaticos.push_back(new ObjetoInterfazEstatico(72, 23, RUTA_ESTRELLAS_INTERFAZ));
     vidas = new NumeroVidas(34, 24, 1);
+	estrellas = new EstrellasInterfaz(96, 16, 0);
     contenedor = new Contenedor(114, 10, false);
     tiempo = new TiempoInterfaz(153, 24, 300);
     monedas = new MonedasInterfaz(226, 15, 0);
@@ -34,12 +35,23 @@ void Interfaz::CambiarNumeroVidas(int numVidas)
 	vidas->CambiarVida(numVidas);
 }
 
+void Interfaz::CambiarNumeroEstrellas(int numEstrellas)
+{
+	estrellas->CambiarEstrellas(numEstrellas);
+}
+
+void Interfaz::CambiarContenedor()
+{
+	contenedor->CambiarSeta();
+}
+
 void Interfaz::Renderizar()
 {
 	for (std::size_t i = 0; i < objetosEstaticos.size(); i++)
 		objetosEstaticos[i]->Renderizar();
 
 	vidas->Renderizar();
+	estrellas->Renderizar();
 	contenedor->Renderizar();
 	tiempo->Renderizar();
 	monedas->Renderizar();
@@ -52,6 +64,7 @@ void Interfaz::Destruir()
 		objetosEstaticos[i]->Destruir();
 	
 	vidas->Destruir();
+	estrellas->Destruir();
 	contenedor->Destruir();
 	tiempo->Destruir();
 	monedas->Destruir();
