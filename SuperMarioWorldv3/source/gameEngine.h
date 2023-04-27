@@ -24,14 +24,18 @@
 
 using namespace std;
 
+struct Jugador;
+struct Interfaz;
+struct MonedaYoshi;
+
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
-
-struct Jugador;
+extern Interfaz* interfaz;
 
 struct FixtureData
 {
 	int tipo;	
+	MonedaYoshi* monedaYoshi;	
 };
 
 class DetectorDeColisiones : public b2ContactListener
@@ -228,8 +232,10 @@ struct MonedaYoshi
 	SDL_Texture* textura;
 	SDL_Rect posicion;
 	b2Body* cuerpoFisico;
+	bool recogida;
 	
 	MonedaYoshi(float x, float y, Camara* camara, b2World* world);
+	void Recoger();
 	void Renderizar();
 	void Destruir();
 private:
@@ -272,16 +278,16 @@ struct Mapa
 	int fondoB;
 	int ancho;
 	int alto;
-	vector<Suelo> suelos;
-	vector<Tuberia> tuberias;
-	vector<BloqueGiratorio> bGiratorios;
-	vector<BloqueInterrogante> bInterrogantes;
-	vector<BloqueNube> bNubes;
-	vector<BloquePiedra> bPiedras;
-	vector<Decoracion> decoraciones;
-	vector<MonedaYoshi> monedasYoshi;
-	vector<Plataforma> plataformas;
-	vector<Fondo> fondos;
+	vector<Suelo*> suelos;
+	vector<Tuberia*> tuberias;
+	vector<BloqueGiratorio*> bGiratorios;
+	vector<BloqueInterrogante*> bInterrogantes;
+	vector<BloqueNube*> bNubes;
+	vector<BloquePiedra*> bPiedras;
+	vector<Decoracion*> decoraciones;
+	vector<MonedaYoshi*> monedasYoshi;
+	vector<Plataforma*> plataformas;
+	vector<Fondo*> fondos;
 	
 	Mapa(const char* ruta, Camara* camara, b2World* world);
 	void Renderizar();
@@ -383,13 +389,17 @@ private:
 struct Interfaz
 {
 	vector<ObjetoInterfazEstatico*> objetosEstaticos;
-	NumeroVidas* numVidas;
+	NumeroVidas* vidas;
 	Contenedor* contenedor;
 	TiempoInterfaz* tiempo;
 	MonedasInterfaz* monedas;
 	PuntuacionInterfaz* puntuacion;
 	
 	Interfaz();
+	void CambiarPuntuacion(int numPuntos);
+	void CambiarNumeroMonedas(int numMonedas);
+	void CambiarNumeroVidas(int numVidas);
+	void CambiarContenedor();
 	void Renderizar();
 	void Destruir();
 };

@@ -4,6 +4,7 @@ using namespace std;
 
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
+extern Interfaz* interfaz;
 
 void MonedaYoshi::CargarTextura(const char* ruta)
 {
@@ -21,16 +22,24 @@ void MonedaYoshi::IniciarCuerpoFisico(b2World* world)
 {
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.01f, (posicion.y + posicion.h / 2.0f) * 0.01f);
-	cuerpoFisico = world->CreateBody(&groundBodyDef);
 	b2PolygonShape groundBox;
 	groundBox.SetAsBox((posicion.w / 2.0f) * 0.01f, (posicion.h / 2.0f)  * 0.01f);
-	cuerpoFisico->CreateFixture(&groundBox, 0.0f);
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &groundBox;
+	fixtureDef.isSensor = true;
+	FixtureData* data = new FixtureData;
+	data->tipo = TIPO_MONEDA_YOSHI;
+	data->monedaYoshi = this;
+	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data);
+	cuerpoFisico = world->CreateBody(&groundBodyDef);
+	cuerpoFisico->CreateFixture(&fixtureDef);
 }
 
 MonedaYoshi::MonedaYoshi(float x, float y, Camara* camara, b2World* world)
 {
 	posicion.x = x;
 	posicion.y = y;
+	recogida = false;
 	this->camara = camara;
 	CargarTextura(RUTA_MONEDA_YOSHI_1);
 	const char* rutas[] = {
@@ -42,10 +51,22 @@ MonedaYoshi::MonedaYoshi(float x, float y, Camara* camara, b2World* world)
 		RUTA_MONEDA_YOSHI_2
 	};
 	animacion.CrearAnimacion(6, 6, rutas);
+	IniciarCuerpoFisico(world);
+}
+
+void MonedaYoshi::Recoger()
+{
+	if (!recogida)
+	{
+		//cuerpoFisico->GetWorld()->DestroyBody(cuerpoFisico);
+		interfaz->CambiarPuntuacion(100);
+		recogida = true;
+	}
 }
 
 void MonedaYoshi::Renderizar()
 {
+	if (recogida) return;
 	animacion.Renderizar();
 	textura = animacion.textura;
 	int posicionDibujoX = posicion.x - camara->x;

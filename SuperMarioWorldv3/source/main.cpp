@@ -2,6 +2,7 @@
 
 SDL_Renderer* renderer;
 SDL_Window* window;
+Interfaz* interfaz;
 
 int main(int argc, char** argv)
 {
@@ -31,9 +32,9 @@ int main(int argc, char** argv)
         return 1;
     }
 	
+	interfaz = new Interfaz();
 	Camara camara(0.0f, 0.0f);
 	Mapa mundo1(RUTA_MAPA_MUNDO_1, &camara, &world);
-	Interfaz interfaz;
 	Jugador mario(&camara, &world);
 	camara.AsignarJugador(&mario);
 	
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
     	//camara.y += 6 * y;
 
 		mundo1.Renderizar();
-		interfaz.Renderizar();
+		interfaz->Renderizar();
 		mario.Renderizar(x, SDL_JoystickGetButton(joystick, 0));
 
     	world.Step(1.0f / 60.0f, 6, 2);
@@ -74,7 +75,7 @@ int main(int argc, char** argv)
     }
     
     mundo1.Destruir();
-	interfaz.Destruir();
+	interfaz->Destruir();
     IMG_Quit();
     SDL_Quit();
     romfsExit();

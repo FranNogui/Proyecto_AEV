@@ -18,6 +18,9 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 			case TIPO_GROUND_CHECK:
 				numGroundChecks++;
 				break;
+			case TIPO_MONEDA_YOSHI:
+				data->monedaYoshi->Recoger();
+				break;
 		}
 	}
 	
@@ -28,6 +31,9 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 		{
 			case TIPO_GROUND_CHECK:
 				numGroundChecks++;
+				break;
+			case TIPO_MONEDA_YOSHI:
+				data->monedaYoshi->Recoger();
 				break;
 		}
 	}

@@ -27,7 +27,7 @@ void Jugador::IniciarCuerpoFisico(b2World* world)
 	bodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.01f, (posicion.y + posicion.h / 2.0f) * 0.01f);
 	cuerpoFisico = world->CreateBody(&bodyDef);
 	b2CircleShape circle;
-	circle.m_radius = (posicion.w / 2.0f) * 0.01f;
+	circle.m_radius = (posicion.w / 2.0f - 1.0f) * 0.01f;
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &circle;
 	fixtureDef.density = 1.0f;

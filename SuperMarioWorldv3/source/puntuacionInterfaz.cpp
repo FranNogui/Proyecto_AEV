@@ -46,8 +46,9 @@ PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 		posicion[i].x = x + posicion[i].w * i;
 		posicion[i].y = y;
 	}
+	int aux = puntuacionAct;
 	for(int i = 6; i > 0; i--){
-		switch(puntuacionAct % 10)
+		switch(aux % 10)
 		{
 			case 0:
 				puntuacion[i] = numeros[0];
@@ -79,9 +80,8 @@ PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 			case 9:
 				puntuacion[i] = numeros[9];
 				break;
-		
 		}
-		puntuacionAct = puntuacionAct / 10;
+		aux /= 10;
 	}
 	
 }
@@ -89,6 +89,43 @@ PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 void PuntuacionInterfaz::CambiarPuntuacion(int incremento)
 {
 	puntuacionAct = puntuacionAct + incremento;
+	int aux = puntuacionAct;
+	for(int i = 6; i > 0; i--){
+		switch(aux % 10)
+		{
+			case 0:
+				puntuacion[i] = numeros[0];
+				break;
+			case 1:
+				puntuacion[i] = numeros[1];
+				break;
+			case 2:
+				puntuacion[i] = numeros[2];
+				break;
+			case 3:
+				puntuacion[i] = numeros[3];
+				break;
+			case 4:
+				puntuacion[i] = numeros[4];
+				break;
+			case 5:
+				puntuacion[i] = numeros[5];
+				break;
+			case 6:
+				puntuacion[i] = numeros[6];
+				break;
+			case 7:
+				puntuacion[i] = numeros[7];
+				break;
+			case 8:
+				puntuacion[i] = numeros[8];
+				break;
+			case 9:
+				puntuacion[i] = numeros[9];
+				break;
+		}
+		aux /= 10;
+	}
 }
 
 void PuntuacionInterfaz::Renderizar()
