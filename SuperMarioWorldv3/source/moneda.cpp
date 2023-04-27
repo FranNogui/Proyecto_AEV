@@ -57,6 +57,7 @@ void Moneda::Recoger()
 	if (!recogida)
 	{
 		interfaz->CambiarPuntuacion(100);
+		interfaz->CambiarNumeroMonedas(1);
 		recogida = true;
 	}
 }

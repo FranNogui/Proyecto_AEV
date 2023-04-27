@@ -80,7 +80,7 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 			mapa >> act;
 			if (act == 1)
 				monedasYoshi.push_back(new MonedaYoshi(j * pixeles, i * pixeles, camara, world));
-			else if (act == 1)
+			else if (act == 2)
 				monedas.push_back(new Moneda(j * pixeles, i * pixeles, camara, world));
 		}
 	}

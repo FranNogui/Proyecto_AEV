@@ -10,13 +10,13 @@ Interfaz::Interfaz()
     objetosEstaticos.push_back(new ObjetoInterfazEstatico(16, 15, RUTA_MARIO_TEXTO));
     objetosEstaticos.push_back(new ObjetoInterfazEstatico(26, 24, RUTA_VIDA_INTERFAZ));
     objetosEstaticos.push_back(new ObjetoInterfazEstatico(152, 15, RUTA_TIME_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(198, 15, RUTA_DINERO_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(72, 24, RUTA_ESTRELLAS_INTERFAZ));
-    vidas = new NumeroVidas(32, 24, 1);
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(202, 15, RUTA_DINERO_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(72, 23, RUTA_ESTRELLAS_INTERFAZ));
+    vidas = new NumeroVidas(34, 24, 1);
     contenedor = new Contenedor(114, 10, false);
     tiempo = new TiempoInterfaz(153, 24, 300);
-    monedas = new MonedasInterfaz(221, 15, 0);
-    puntuacion = new PuntuacionInterfaz(185, 24, 0);
+    monedas = new MonedasInterfaz(226, 15, 0);
+    puntuacion = new PuntuacionInterfaz(186, 24, 0);
 }
 
 void Interfaz::CambiarPuntuacion(int numPuntos)
