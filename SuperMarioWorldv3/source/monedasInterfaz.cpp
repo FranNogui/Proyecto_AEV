@@ -118,6 +118,74 @@ MonedasInterfaz::MonedasInterfaz(float x, float y, int monedasInicial)
 void MonedasInterfaz::CambiarMonedas(int incremento)
 {
 	monedasAct = monedasAct + incremento;
+	
+	switch(monedasAct / 10)
+	{
+		case 0:
+			monedas[0] = numeros[0];
+			break;
+		case 1:
+			monedas[0] = numeros[1];
+			break;
+		case 2:
+			monedas[0] = numeros[2];
+			break;
+		case 3:
+			monedas[0] = numeros[3];
+			break;
+		case 4:
+			monedas[0] = numeros[4];
+			break;
+		case 5:
+			monedas[0] = numeros[5];
+			break;
+		case 6:
+			monedas[0] = numeros[6];
+			break;
+		case 7:
+			monedas[0] = numeros[7];
+			break;
+		case 8:
+			monedas[0] = numeros[8];
+			break;
+		case 9:
+			monedas[0] = numeros[9];
+			break;
+	}
+	
+	switch(monedasAct % 10)
+	{
+		case 0:
+			monedas[1] = numeros[0];
+			break;
+		case 1:
+			monedas[1] = numeros[1];
+			break;
+		case 2:
+			monedas[1] = numeros[2];
+			break;
+		case 3:
+			monedas[1] = numeros[3];
+			break;
+		case 4:
+			monedas[1] = numeros[4];
+			break;
+		case 5:
+			monedas[1] = numeros[5];
+			break;
+		case 6:
+			monedas[1] = numeros[6];
+			break;
+		case 7:
+			monedas[1] = numeros[7];
+			break;
+		case 8:
+			monedas[1] = numeros[8];
+			break;
+		case 9:
+			monedas[1] = numeros[9];
+			break;
+	}
 }
 
 void MonedasInterfaz::Renderizar()

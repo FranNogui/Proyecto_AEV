@@ -7,15 +7,16 @@ extern SDL_Window* window;
 
 Interfaz::Interfaz()
 {
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(0, 20, RUTA_MARIO_TEXTO));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(40, 20, RUTA_VIDA_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(80, 20, RUTA_TIME_INTERFAZ));
-    objetosEstaticos.push_back(new ObjetoInterfazEstatico(120, 20, RUTA_DINERO_INTERFAZ));
-    vidas = new NumeroVidas(0, 0, 5);
-    contenedor = new Contenedor(40, 0, false);
-    tiempo = new TiempoInterfaz(80, 0, 300);
-    monedas = new MonedasInterfaz(120, 0, 0);
-    puntuacion = new PuntuacionInterfaz(160, 0, 0);
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(16, 15, RUTA_MARIO_TEXTO));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(26, 24, RUTA_VIDA_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(152, 15, RUTA_TIME_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(198, 15, RUTA_DINERO_INTERFAZ));
+    objetosEstaticos.push_back(new ObjetoInterfazEstatico(72, 24, RUTA_ESTRELLAS_INTERFAZ));
+    vidas = new NumeroVidas(32, 24, 1);
+    contenedor = new Contenedor(114, 10, false);
+    tiempo = new TiempoInterfaz(153, 24, 300);
+    monedas = new MonedasInterfaz(221, 15, 0);
+    puntuacion = new PuntuacionInterfaz(185, 24, 0);
 }
 
 void Interfaz::CambiarPuntuacion(int numPuntos)

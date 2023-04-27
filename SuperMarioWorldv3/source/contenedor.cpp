@@ -46,9 +46,9 @@ void Contenedor::CambiarSeta()
 
 void Contenedor::Renderizar()
 {
-	if (contenedores[0])
+	if (!conSeta)
 		SDL_RenderCopy(renderer, contenedores[0], NULL, &posicion);
-	if (contenedores[1])
+	else
 		SDL_RenderCopy(renderer, contenedores[1], NULL, &posicion);
 }
 

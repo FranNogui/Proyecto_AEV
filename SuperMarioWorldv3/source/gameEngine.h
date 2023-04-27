@@ -27,6 +27,7 @@ using namespace std;
 struct Jugador;
 struct Interfaz;
 struct MonedaYoshi;
+struct Moneda;
 
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
@@ -35,7 +36,8 @@ extern Interfaz* interfaz;
 struct FixtureData
 {
 	int tipo;	
-	MonedaYoshi* monedaYoshi;	
+	MonedaYoshi* monedaYoshi;
+	Moneda* moneda;	
 };
 
 class DetectorDeColisiones : public b2ContactListener
@@ -243,6 +245,24 @@ private:
 	void IniciarCuerpoFisico(b2World* world);
 };
 
+struct Moneda
+{
+	Animacion animacion;
+	Camara* camara;
+	SDL_Texture* textura;
+	SDL_Rect posicion;
+	b2Body* cuerpoFisico;
+	bool recogida;
+	
+	Moneda(float x, float y, Camara* camara, b2World* world);
+	void Recoger();
+	void Renderizar();
+	void Destruir();
+private:
+	void CargarTextura(const char* ruta);
+	void IniciarCuerpoFisico(b2World* world);		
+};
+
 struct Plataforma
 {
 	Camara* camara;
@@ -288,6 +308,7 @@ struct Mapa
 	vector<MonedaYoshi*> monedasYoshi;
 	vector<Plataforma*> plataformas;
 	vector<Fondo*> fondos;
+	vector<Moneda*> monedas;
 	
 	Mapa(const char* ruta, Camara* camara, b2World* world);
 	void Renderizar();
@@ -344,7 +365,7 @@ struct TiempoInterfaz
 	SDL_Texture* tiempo[3];
 	SDL_Rect posicion[3];
 	int tiempoAct;
-	long long tiempoInicio;
+	float tiempoReal;
 	
 	TiempoInterfaz(float x, float y, int tiempoInicial);
 	void Renderizar();

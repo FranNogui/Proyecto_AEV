@@ -17,5 +17,6 @@
 
 #define TIPO_GROUND_CHECK 1
 #define TIPO_MONEDA_YOSHI 2
+#define TIPO_MONEDA 3
 
 #endif

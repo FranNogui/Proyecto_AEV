@@ -78,8 +78,10 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		for (int j = 0; j < ancho; j++)
 		{
 			mapa >> act;
-			if (act != 0)
+			if (act == 1)
 				monedasYoshi.push_back(new MonedaYoshi(j * pixeles, i * pixeles, camara, world));
+			else if (act == 1)
+				monedas.push_back(new Moneda(j * pixeles, i * pixeles, camara, world));
 		}
 	}
 	
@@ -131,6 +133,8 @@ void Mapa::Renderizar()
 		bPiedras[i]->Renderizar();
 	for (std::size_t i = 0; i < monedasYoshi.size(); i++)
 		monedasYoshi[i]->Renderizar();
+	for (std::size_t i = 0; i < monedas.size(); i++)
+		monedas[i]->Renderizar();
 }
 
 void Mapa::Destruir()
@@ -155,5 +159,7 @@ void Mapa::Destruir()
 		bPiedras[i]->Destruir();
 	for (std::size_t i = 0; i < monedasYoshi.size(); i++)
 		monedasYoshi[i]->Destruir();
+	for (std::size_t i = 0; i < monedas.size(); i++)
+		monedas[i]->Destruir();
 }
 

@@ -118,6 +118,74 @@ NumeroVidas::NumeroVidas(float x, float y, int numVidasInicial)
 void NumeroVidas::CambiarVida(int incremento)
 {
 	numVidas = numVidas + incremento;
+	
+	switch(numVidas / 10)
+	{
+		case 0:
+			vidas[0] = numeros[0];
+			break;
+		case 1:
+			vidas[0] = numeros[1];
+			break;
+		case 2:
+			vidas[0] = numeros[2];
+			break;
+		case 3:
+			vidas[0] = numeros[3];
+			break;
+		case 4:
+			vidas[0] = numeros[4];
+			break;
+		case 5:
+			vidas[0] = numeros[5];
+			break;
+		case 6:
+			vidas[0] = numeros[6];
+			break;
+		case 7:
+			vidas[0] = numeros[7];
+			break;
+		case 8:
+			vidas[0] = numeros[8];
+			break;
+		case 9:
+			vidas[0] = numeros[9];
+			break;
+	}
+	
+	switch(numVidas % 10)
+	{
+		case 0:
+			vidas[1] = numeros[0];
+			break;
+		case 1:
+			vidas[1] = numeros[1];
+			break;
+		case 2:
+			vidas[1] = numeros[2];
+			break;
+		case 3:
+			vidas[1] = numeros[3];
+			break;
+		case 4:
+			vidas[1] = numeros[4];
+			break;
+		case 5:
+			vidas[1] = numeros[5];
+			break;
+		case 6:
+			vidas[1] = numeros[6];
+			break;
+		case 7:
+			vidas[1] = numeros[7];
+			break;
+		case 8:
+			vidas[1] = numeros[8];
+			break;
+		case 9:
+			vidas[1] = numeros[9];
+			break;
+	}
 }
 
 void NumeroVidas::Renderizar()

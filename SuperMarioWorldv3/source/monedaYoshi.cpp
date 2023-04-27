@@ -58,8 +58,8 @@ void MonedaYoshi::Recoger()
 {
 	if (!recogida)
 	{
-		//cuerpoFisico->GetWorld()->DestroyBody(cuerpoFisico);
-		interfaz->CambiarPuntuacion(100);
+		interfaz->CambiarNumeroMonedas(1);
+		interfaz->CambiarPuntuacion(500);
 		recogida = true;
 	}
 }

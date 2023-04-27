@@ -47,7 +47,7 @@ PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 		posicion[i].y = y;
 	}
 	int aux = puntuacionAct;
-	for(int i = 6; i > 0; i--){
+	for(int i = 7; i > 0; i--){
 		switch(aux % 10)
 		{
 			case 0:
@@ -90,7 +90,7 @@ void PuntuacionInterfaz::CambiarPuntuacion(int incremento)
 {
 	puntuacionAct = puntuacionAct + incremento;
 	int aux = puntuacionAct;
-	for(int i = 6; i > 0; i--){
+	for(int i = 7; i > 0; i--){
 		switch(aux % 10)
 		{
 			case 0:

@@ -21,6 +21,9 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 			case TIPO_MONEDA_YOSHI:
 				data->monedaYoshi->Recoger();
 				break;
+			case TIPO_MONEDA:
+				data->moneda->Recoger();
+				break;
 		}
 	}
 	
@@ -34,6 +37,9 @@ void DetectorDeColisiones::BeginContact(b2Contact* contact)
 				break;
 			case TIPO_MONEDA_YOSHI:
 				data->monedaYoshi->Recoger();
+				break;
+			case TIPO_MONEDA:
+				data->moneda->Recoger();
 				break;
 		}
 	}
