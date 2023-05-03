@@ -5,23 +5,42 @@ using namespace std;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 
+/*
+Metodo para cargar la imagen que se encuentra en ruta en la variable textura.
+*/
 void Decoracion::CargarTextura(const char* ruta)
 {
+	// Cargamos la imagen
 	SDL_Surface* img = IMG_Load(ruta);
+	
 	if (img)
 	{
+		// Ajustamos el tamanyo del SDL_Rect al de la imagen
 		posicion.w = img->w;
 		posicion.h = img->h;
+		
+		// Creamos la textura a partir de la imagen
 		textura = SDL_CreateTextureFromSurface(renderer, img);
+		
+		// Liberamos la imagen
 		SDL_FreeSurface(img);
 	}
 }
 
+/*
+Constructor de un elemento de decoracion en una posicion dada. Necesita la camara y el mundo fisico actual
+El tipo se utiliza para indicar que decoracion usar
+*/
 Decoracion::Decoracion(int tipo, float x, float y, Camara* camara)
 {
+	// Ajustamos la posicion del SDL_Rect
 	posicion.x = x;
 	posicion.y = y;
+	
+	// Guardamos la camara
 	this->camara = camara;
+	
+	// Comprobamos que decoracion usar
 	switch (tipo)
 	{
 		case 1:
@@ -54,10 +73,16 @@ Decoracion::Decoracion(int tipo, float x, float y, Camara* camara)
 	}
 }
 
+/*
+Metodo para dibujar en pantalla la decoracion
+*/
 void Decoracion::Renderizar()
 {
+	// Calculamos la posicion donde se debe dibujar teniendo en cuenta la camara (funciona como un offset)
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
+	
+	// Si tenemos la textura y se encuentra dentro de los limites de la pantalla, lo dibujamos
 	if (textura && 
 		posicionDibujoX + posicion.w > -50 && posicionDibujoX < SCREEN_W + 50 && 
 		posicionDibujoY > -50 && posicionDibujoY + posicion.h < SCREEN_H + 50)
@@ -68,7 +93,11 @@ void Decoracion::Renderizar()
 	}
 }
 
+/*
+Metodo para liberar el bloque de la memoria
+*/
 void Decoracion::Destruir()
 {
+	// Destruimos la textura
 	SDL_DestroyTexture(textura);
 }

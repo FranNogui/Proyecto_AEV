@@ -6,9 +6,11 @@ Interfaz* interfaz;
 
 int main(int argc, char** argv)
 {
+	// Iniciamos para poder leer archivos
 	romfsInit();
 	chdir("romfs:/");
 	
+	// Iniciamos lo relacionado con el mundo fisico
 	b2Vec2 gravity(0.0, 10.0f);
 	b2World world(gravity);
 	DetectorDeColisiones detector;
@@ -22,6 +24,7 @@ int main(int argc, char** argv)
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER);
 	IMG_Init(IMG_INIT_PNG);
 	
+	// Creamos la ventana y el renderer
 	window = SDL_CreateWindow("Test Mario", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	
@@ -32,6 +35,7 @@ int main(int argc, char** argv)
         return 1;
     }
 	
+	// Creamos los elementos del nivel
 	interfaz = new Interfaz();
 	Camara camara(0.0f, 0.0f);
 	Mapa mundo1(RUTA_MAPA_MUNDO_1, &camara, &world);
@@ -65,15 +69,20 @@ int main(int argc, char** argv)
     		
     	//camara.x += 6 * x;
     	//camara.y += 6 * y;
-
+	
+		// Renderizamos todo lo necesario
 		mundo1.Renderizar();
 		interfaz->Renderizar();
 		mario.Renderizar(x, SDL_JoystickGetButton(joystick, 0));
 
+		// Actualizamos el mundo fisico
     	world.Step(1.0f / 60.0f, 6, 2);
+    	
+    	// Renderizamos en pantalla
     	SDL_RenderPresent(renderer);
     }
     
+    // Liberamos todo lo necesario
     mundo1.Destruir();
 	interfaz->Destruir();
     IMG_Quit();

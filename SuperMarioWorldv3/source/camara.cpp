@@ -6,17 +6,26 @@ extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 extern int numGroundChecks;
 
+/*
+Constructor de la camara. Se le pasa la posicion inicial
+*/
 Camara::Camara(float x, float y)
 {
 	this->x = x;
 	this->y = y;
 }
 
+/*
+Metodo para tener una referencia al jugador
+*/
 void Camara::AsignarJugador(Jugador* jugador)
 {
 	this->jugador = jugador;
 }
 
+/*
+Metodo para actualiza la posicion de la camara
+*/
 void Camara::Actualizar()
 {
 	/*

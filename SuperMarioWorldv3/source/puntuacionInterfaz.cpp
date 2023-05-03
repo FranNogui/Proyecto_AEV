@@ -5,12 +5,18 @@ using namespace std;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 
+/*
+Metodo para cargar una textura y devolverla como resultado
+*/
 SDL_Texture* PuntuacionInterfaz::CargarTextura(const char* ruta)
 {
+	// Cargamos la textura y declaramos la textura
 	SDL_Surface* img = IMG_Load(ruta);
 	SDL_Texture* tex = NULL;
+	
 	if (img)
 	{
+		// Creamos la textura, ajustamos las posiciones y liberamos la imagen
 		tex = SDL_CreateTextureFromSurface(renderer, img);
 		for (int i = 0; i < 7; i++)
 		{
@@ -22,6 +28,9 @@ SDL_Texture* PuntuacionInterfaz::CargarTextura(const char* ruta)
 	return tex;
 }
 
+/*
+Metodo para cargar las texturas de los numeros
+*/
 void PuntuacionInterfaz::CargarTexturas()
 {
 	numeros[0] = CargarTextura(RUTA_NUMERO_BLANCO_PEQUENYO_0);
@@ -37,15 +46,26 @@ void PuntuacionInterfaz::CargarTexturas()
 
 }
 
+/*
+Constructor de la puntuacion de la interfaz a partir de la posicion del primer 
+numero y la puntuacion inicial
+*/
 PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 {
+	// Actualizamos la puntuacion actual
 	puntuacionAct = puntuacionInicial;
+	
+	// Cargamos las texturas de los numeros
 	CargarTexturas();
+	
+	// Ajustamos las posiciones de los numeros
 	for (int i = 0; i < 7; i++)
 	{
 		posicion[i].x = x + posicion[i].w * i;
 		posicion[i].y = y;
 	}
+	
+	// Actualizamos los sprites
 	int aux = puntuacionAct;
 	for(int i = 6; i >= 0; i--){
 		switch(aux % 10)
@@ -86,9 +106,15 @@ PuntuacionInterfaz::PuntuacionInterfaz(float x, float y, int puntuacionInicial)
 	
 }
 
+/*
+Metodo para anyadir puntuacion
+*/
 void PuntuacionInterfaz::CambiarPuntuacion(int incremento)
-{
+{	
+	// Actualizamos la puntuacion actual
 	puntuacionAct = puntuacionAct + incremento;
+	
+	// Actualizamos los sprites
 	int aux = puntuacionAct;
 	for(int i = 6; i >= 0; i--){
 		switch(aux % 10)
@@ -128,8 +154,12 @@ void PuntuacionInterfaz::CambiarPuntuacion(int incremento)
 	}
 }
 
+/*
+Metodo para dibujar en pantalla el contador
+*/
 void PuntuacionInterfaz::Renderizar()
 {
+	// Si existen las texturas, los dibujamos en su posicion
 	if (puntuacion[0])
 		SDL_RenderCopy(renderer, puntuacion[0], NULL, &posicion[0]);
 	if (puntuacion[1])
@@ -146,8 +176,12 @@ void PuntuacionInterfaz::Renderizar()
 		SDL_RenderCopy(renderer, puntuacion[6], NULL, &posicion[6]);
 }
 
+/*
+Metodo para liberar el contador de la memoria
+*/
 void PuntuacionInterfaz::Destruir()
-{
+{	
+	// Destruimos todas las texturas
 	for (int i = 0; i < 10; i++)
 	{
 		SDL_DestroyTexture(numeros[i]);

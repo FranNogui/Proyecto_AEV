@@ -8,48 +8,94 @@ int numGroundChecks = 0;
 const int ticksJumpDelay = 10;
 int actJumpTicks = 0;
 
+/*
+Metodo para cargar una textura y devolverla como resultado
+*/
 SDL_Texture* Jugador::CargarTextura(const char* ruta)
 {
+	// Cargamos la textura y declaramos la textura
 	SDL_Surface* img = IMG_Load(ruta);
 	SDL_Texture* tex = NULL;
+	
 	if (img)
 	{
+		// Creamos la textura y liberamos la imagen
 		tex = SDL_CreateTextureFromSurface(renderer, img);
 		SDL_FreeSurface(img);
 	}
+	
+	// Devolvemos la textura
 	return tex;
 }
 
+/*
+Metodo para iniciar las propiedades fisicas del jugador
+*/
 void Jugador::IniciarCuerpoFisico(b2World* world)
 {
+	// Definicion del cuerpo fisico
 	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
+	bodyDef.type = b2_dynamicBody; // Indicamos que es dinamico
+	
+	// Colocamos al jugador en la posición indicada teniendo en cuenta que SDL_Rect tiene como origen la esquina
+	// superior izquierda, y la posicion del cuerpo físico debe tener el origen en el centro del objeto. Ademas,
+	// lo escalamos multiplicando por 0.01
 	bodyDef.position.Set((posicion.x + posicion.w / 2.0f) * 0.01f, (posicion.y + posicion.h / 2.0f) * 0.01f);
+	
+	// Creamos el cuerpo cuerpo fisico en el mundo
 	cuerpoFisico = world->CreateBody(&bodyDef);
+	
+	// Definimos un circulo para que quede centrado en el jugador con el tamanyo adequado
 	b2CircleShape circle;
 	circle.m_radius = (posicion.w / 2.0f - 1.0f) * 0.01f;
+	
+	// Creamos la definicion de la colision
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &circle;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.0f;
+	fixtureDef.shape = &circle;		// Asignamos el circulo
+	fixtureDef.density = 1.0f;		// Indicamos su densidad
+	fixtureDef.friction = 0.0f;		// Indicamos su friccion
+	
+	// Asginamos la colision al cuerpo
 	cuerpoFisico->CreateFixture(&fixtureDef);
+	
+	// Fijamos su rotacion
 	cuerpoFisico->SetFixedRotation(true);
+	
+	// Creamos una caja para la comprobacion de si toca suelo
 	b2PolygonShape polygonShape;
 	polygonShape.SetAsBox(0.05, 0.05, b2Vec2(0, 0.12), 0);
+	
+	// Creamos la informacion necesario
 	FixtureData* data = new FixtureData;
 	data->tipo = TIPO_GROUND_CHECK;
-	fixtureDef.shape = &polygonShape;
-	fixtureDef.isSensor = true;
-	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data);
+	
+	// Asignamos todo lo necesario a la nueva colision
+	fixtureDef.shape = &polygonShape;		// Asignamos la caja
+	fixtureDef.isSensor = true;				// Es un trigger
+	fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(data); 	// Asignamos la informacion
+	
+	// Asignamos la colision
 	cuerpoFisico->CreateFixture(&fixtureDef);
+	
+	// Fijamos su rotacion (probablemente innecesario ya que esta hecho anteriormente)
 	cuerpoFisico->SetFixedRotation(true);
 }
 
+/*
+Constructor del jugador
+*/
 Jugador::Jugador(Camara* camara, b2World* world)
 {
+	// Variable para la velocidad de las animaciones
 	int nTickPorFrame = 4;
+	
+	// Asignamos la camara
 	this->camara = camara;
+	
+	// El estado es el de quieto
 	estado = Quieto;
+	
+	// Iniciamos el resto de variables
 	tamanyo = 0;
 	direccion = 0;
 	velocidad = 0;
@@ -58,7 +104,10 @@ Jugador::Jugador(Camara* camara, b2World* world)
 	posicion.w = 16;
 	posicion.h = 24;
 	
+	// Iniciamos el cuerpo fisico
 	IniciarCuerpoFisico(world);
+	
+	// Cargamos todas las texturas y animaciones
 	agachado[0] = CargarTextura(RUTA_MARIO_PEQUENYO_DERECHA_AGACHADO);
 	agachado[1] = CargarTextura(RUTA_MARIO_PEQUENYO_IZQUIERDA_AGACHADO);
 	agachado[2] = CargarTextura(RUTA_MARIO_GRANDE_DERECHA_AGACHADO);
@@ -142,16 +191,28 @@ Jugador::Jugador(Camara* camara, b2World* world)
 	muerte.CrearAnimacion(2, nTickPorFrame, muerte0);
 }
 
+
+/*
+Primera version para el movimiento del jugador, ya no se utiliza
+*/
 void Jugador::Movimiento(int x)
 {
 	cuerpoFisico->SetLinearVelocity(b2Vec2(x * maxVelocidad, cuerpoFisico->GetLinearVelocity().y));
 }
 
+/*
+Metodo para dibujar al jugador y actualizar su maquina de estados
+*/
 void Jugador::Renderizar(int x, bool saltado)
 {
+	// Calculamos la posicion donde esta cuerpo fisico (desaplicando la escala multiplicando por 100)
 	posicion.x = floor(cuerpoFisico->GetPosition().x * 100.0f) - posicion.w / 2.0f;
 	posicion.y = floor(cuerpoFisico->GetPosition().y * 100.0f) - posicion.h / 2.0f - 3;
+	
+	// Actualizamos la camara
 	camara->Actualizar();
+		
+	// Calculamos la posicion donde se debe dibujar teniendo en cuenta la camara (funciona como un offset)	
 	int posicionDibujoX = posicion.x - camara->x;
 	int posicionDibujoY = posicion.y - camara->y;
 	SDL_Rect posicionDibujo;
@@ -160,6 +221,7 @@ void Jugador::Renderizar(int x, bool saltado)
 	if (abs(cuerpoFisico->GetLinearVelocity().x) < 0.01)
 		cuerpoFisico->SetLinearVelocity(b2Vec2(0.0f, cuerpoFisico->GetLinearVelocity().y));
 	
+	// Actualizamos la maquina de estados
 	switch (estado)
 	{
 		case Quieto:

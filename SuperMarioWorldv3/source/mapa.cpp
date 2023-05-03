@@ -5,10 +5,17 @@ using namespace std;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 
+/*
+Constructor de un mapa. Necesita la ruta del fichero que contiene la informacion
+del mismo, la camara y el mundo fisico
+*/
 Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 {
+	// Leemos el fichero
 	std::ifstream mapa;
 	mapa.open(ruta, std::ios::in);
+	
+	// Vamos cargando todo la informacion del fichero
 	mapa >> ancho >> alto;
 	int pixeles = 16, act = 0, nCapas = 0, fondoAct, posFondo = 0;
 	
@@ -122,11 +129,17 @@ Mapa::Mapa(const char* ruta, Camara* camara, b2World* world)
 		fondos.push_back(new Fondo(fondoAct, posFondo, 0.0f, camara));
 		posFondo += 512;
 	}
+	
+	// Cerramos el fichero
 	mapa.close();
 }
 
+/*
+Metodo para renderizar el mapa
+*/
 void Mapa::Renderizar()
 {
+	// Renderizamos todos los vectores de elementos
 	for (std::size_t i = 0; i < fondos.size(); i++)
 		fondos[i]->Renderizar();
 	for (std::size_t i = 0; i < decoraciones.size(); i++)
@@ -155,8 +168,12 @@ void Mapa::Renderizar()
 		hongosVida[i]->Renderizar();
 }
 
+/*
+Metodo para liberar de memoria un mapa
+*/
 void Mapa::Destruir()
 {
+	// Destruimos todos los vectores de elementos
 	for (std::size_t i = 0; i < fondos.size(); i++)
 		fondos[i]->Destruir();
 	for (std::size_t i = 0; i < decoraciones.size(); i++)
