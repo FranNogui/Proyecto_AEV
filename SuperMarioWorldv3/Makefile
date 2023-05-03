@@ -44,8 +44,9 @@ DATA		:=	data
 INCLUDES	:=	include
 ROMFS		:=	romfs
 
-APP_TITLE   := SDL2+mixer+image Demo
-APP_AUTHOR  := carstene1ns
+APP_TITLE   := Super Mario World para Switch
+APP_AUTHOR  := Rafa Benavent García y Francisco José Noguera Guijarro
+ICON		:= icon.png
 
 #---------------------------------------------------------------------------------
 # options for code generation
